@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import './Login.css'
-import Admin from './Admin.jsx'
-import Users from './Users.jsx'
+import '../css/Login.css'
+import AdminPage from './AdminPage.jsx'
+import StudentPage from './StudentPage.jsx'
 
-function Login({onLoginSuccess, triggerAlert}) {
+function LoginPage({ onLoginSuccess, triggerAlert }) {
     const [isAdmin, setIsAdmin] = useState(true);
     const handleLogin = (e) => {
         e.preventDefault();
@@ -47,9 +47,9 @@ function Login({onLoginSuccess, triggerAlert}) {
                         Admin? <a href="#" onClick={() => setIsAdmin(true)}  >Click here</a>
                     </p>
                 </div>}
-                
+
         </>
     )
 
 }
-export default Login;
+export default LoginPage;

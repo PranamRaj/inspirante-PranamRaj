@@ -1,10 +1,10 @@
-import './Users.css'
+import '../css/Users.css'
 import { useState } from 'react';
-function Users({triggerAlert}) {
+function StudentPage({ triggerAlert }) {
     const [isRegistered, setIsRegistered] = useState(false);
     const registerEventHandler = () => {
-        setIsRegistered(true);    
-        triggerAlert('Registered for the event successfully!');    
+        setIsRegistered(true);
+        triggerAlert('Registered for the event successfully!');
     };
     return (
         <div className="userPage">
@@ -18,7 +18,7 @@ function Users({triggerAlert}) {
                         <p>Date: 2023-10-15</p>
                         <p>Venue: Conference Room</p>
                         <p>Capacity: 100</p>
-                        <button className="seeDetails" onClick={registerEventHandler}>
+                        <button className={isRegistered ? 'registered' : 'register'} onClick={registerEventHandler}>
                             {isRegistered ? 'Registered' : 'Register'}
                         </button>
                     </li>
@@ -27,7 +27,7 @@ function Users({triggerAlert}) {
                         <p>Date: 2023-10-15</p>
                         <p>Venue: Conference Room</p>
                         <p>Capacity: 100</p>
-                        <button className="seeDetails" onClick={registerEventHandler}>
+                        <button className={isRegistered ? 'registered' : 'register'} onClick={registerEventHandler}>
                             {isRegistered ? 'Registered' : 'Register'}
                         </button>
                     </li>
@@ -36,7 +36,7 @@ function Users({triggerAlert}) {
                         <p>Date: 2023-10-15</p>
                         <p>Venue: Conference Room</p>
                         <p>Capacity: 100</p>
-                        <button className="seeDetails" onClick={registerEventHandler}>
+                        <button className={isRegistered ? 'registered' : 'register'} onClick={registerEventHandler}>
                             {isRegistered ? 'Registered' : 'Register'}
                         </button>
                     </li>
@@ -45,7 +45,7 @@ function Users({triggerAlert}) {
                         <p>Date: 2023-10-15</p>
                         <p>Venue: Conference Room</p>
                         <p>Capacity: 100</p>
-                        <button className="seeDetails" onClick={registerEventHandler}>
+                        <button className={isRegistered ? 'registered' : 'register'} onClick={registerEventHandler}>
                             {isRegistered ? 'Registered' : 'Register'}
                         </button>
                     </li>
@@ -59,32 +59,32 @@ function Users({triggerAlert}) {
                         <p>Date: 2023-10-15</p>
                         <p>Venue: Conference Room</p>
                         <p>Capacity: 100</p>
-                        
+
                     </li>
                     <li className="event">
                         <h4>Event 1</h4>
                         <p>Date: 2023-10-15</p>
                         <p>Venue: Conference Room</p>
                         <p>Capacity: 100</p>
-                        
+
                     </li>
                     <li className="event">
                         <h4>Event 1</h4>
                         <p>Date: 2023-10-15</p>
                         <p>Venue: Conference Room</p>
                         <p>Capacity: 100</p>
-                        
+
                     </li>
                     <li className="event">
                         <h4>Event 1</h4>
                         <p>Date: 2023-10-15</p>
                         <p>Venue: Conference Room</p>
                         <p>Capacity: 100</p>
-                        
+
                     </li>
                 </ul>
             </div>
         </div>
     )
 }
-export default Users;
+export default StudentPage;

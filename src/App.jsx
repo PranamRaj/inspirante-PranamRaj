@@ -1,8 +1,8 @@
-import Admin from './Admin.jsx'
+import Admin from './assets/components/AdminPage.jsx'
 import './App.css'
-import Login from './Login.jsx'
-import Users from './Users.jsx'
-import {useState} from 'react'
+import Login from './assets/components/LoginPage.jsx'
+import Users from './assets/components/StudentPage.jsx'
+import { useState } from 'react'
 
 function App() {
   const [isRole, setIsRole] = useState(null);
@@ -13,14 +13,14 @@ function App() {
   };
   return (
     <>
-    {isRole === null ? (
-      <Login onLoginSuccess={setIsRole} triggerAlert={triggerAlert} />
-    ) : isRole === "admin" ? (
-      <Admin triggerAlert={triggerAlert} />
-    ) : (
-      <Users triggerAlert={triggerAlert} />
-    )}
-    {message && <div className="alert">{message}<div className="load"/></div>}
+      {isRole === null ? (
+        <Login onLoginSuccess={setIsRole} triggerAlert={triggerAlert} />
+      ) : isRole === "admin" ? (
+        <Admin triggerAlert={triggerAlert} />
+      ) : (
+        <Users triggerAlert={triggerAlert} />
+      )}
+      {message && <div className="alert">{message}<div className="load" /></div>}
     </>
 
   )

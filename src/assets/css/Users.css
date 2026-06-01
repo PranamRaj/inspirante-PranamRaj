@@ -52,18 +52,23 @@
     font-size: 0.95rem;
 }
 
-.seeDetails {
+.event button {
     margin-top: 0.6rem;
     padding: 0.5rem 0.8rem;
     border-radius: 8px;
     border: none;
-    background: rgba(59, 130, 246, 0.95);
-    color: white;
     font-weight: 600;
     cursor: pointer;
 }
+.event .register {
+    background-color: #17bc51;
+}
+.event .registered {
+    background-color: grey;
+    cursor: default;
+}
 
-.seeDetails:hover {
+.event button:hover {
     filter: brightness(1.05);
 }
 
