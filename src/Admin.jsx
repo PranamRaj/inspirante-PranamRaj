@@ -1,11 +1,14 @@
 import './Admin.css'
+import { useState } from 'react';
 
-function Admin() {
+function Admin({triggerAlert}) {
+    const [events,setEvents]=useState(false);
     return (
         <div className="adminPage">
             <h1>Welcome, Admin!</h1>
             <hr />
-            <h3>Events Management</h3>
+            <h3>Events Management <span><button className="createEventButton" onClick={() => setEvents(true)}>+Create New Event</button></span>
+            </h3>
             <div className="eventsList">
                 <ul className="events">
                     <li className="event">
@@ -38,9 +41,9 @@ function Admin() {
                     </li>
                 </ul>
             </div>
-            <h3 style={{ textAlign: 'center' , margin: '4rem 1rem 0 0' }}>Create New Event</h3>
-            <div className="createEvents">
-                <form action="Post" className="createEventForm" >
+            {events &&(
+            <div className="createEvents" onClick={() => setEvents(false)}>
+                    <form action="Post" className="createEventForm" onClick={(e) => e.stopPropagation()}>
                     <p>Enter Event Name</p>
                     <input type="text" placeholder="Event Name" className="createEventInput" required />
                     <p>Enter Event Date</p>
@@ -51,10 +54,12 @@ function Admin() {
                     <input type="number" min="1" placeholder="Maximum Capacity" className="createEventInput" required />
                     <p>Enter Event Description</p>
                     <textarea placeholder="Event Description" className="createEventInput" required></textarea><br />
-                    <button className="createEventButton" type="submit">Create Event</button>
+                    <button className="createEventButton" type="submit" onClick={() => triggerAlert('Event created successfully!')}>
+                        Create Event
+                    </button>
                 </form>
+                </div>)}
             </div>
-        </div>
     )
 }
 export default Admin;

@@ -3,15 +3,17 @@ import './Login.css'
 import Admin from './Admin.jsx'
 import Users from './Users.jsx'
 
-function Login({onLoginSuccess}) {
+function Login({onLoginSuccess, triggerAlert}) {
     const [isAdmin, setIsAdmin] = useState(true);
     const handleLogin = (e) => {
         e.preventDefault();
         const currentFormClass = e.currentTarget.className;
         if (currentFormClass.includes('adminForm')) {
             onLoginSuccess('admin');
+            triggerAlert('Admin logged in successfully!');
         } else {
             onLoginSuccess('user');
+            triggerAlert('User logged in successfully!');
         }
     }
     return (
