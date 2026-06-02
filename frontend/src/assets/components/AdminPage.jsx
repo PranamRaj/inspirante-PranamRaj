@@ -9,6 +9,10 @@ function AdminPage({ triggerAlert }) {
             <hr />
             <h3>Events Management <span><button className="createEventButton" onClick={() => setEvents(true)}>+Create New Event</button></span>
             </h3>
+            <div className="counts">
+                <div className="countOfEvents"><p>Total Number of Events</p><p>4</p></div>
+                <div className="countOfRegistrations"><p>Total Number of Registration</p><p>4</p></div>
+            </div>
             <div className="eventsList">
                 <ul className="events">
                     <li className="event">

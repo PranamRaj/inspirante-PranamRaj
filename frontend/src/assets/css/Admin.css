@@ -8,11 +8,29 @@
 }
 
 .adminPage h1 {
-    font-size: 4rem;
+    font-size: 50px;
     margin: 0 0 0.1rem ;
     margin-top: 0;
     color: #f8fafc;
     text-align: center;
+}
+.adminPage .counts{
+    border: solid 1px;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    border-radius: 15px;
+    margin: 1.5rem auto;
+}
+.countOfEvents,.countOfRegistrations{
+    border: solid 1px;
+    border-radius: 15px;
+    width: 50%;
+    text-align: center;
+    margin: auto 10px;
+    font-weight: 600;
+    font-size: 18px;
+    background: #042d4c;
 }
 .adminPage h3 {
     font-size: 2rem;
@@ -37,9 +55,10 @@
     border:none;
     border-radius: 50px;
     height: 10px;
-    width: auto;
-    background: linear-gradient(90deg, rgba(7, 7, 62, 0.992), rgba(4, 8, 196, 0.964));
+    width: 50%;
+    background: white;
     margin: 0.1rem 0 1.25rem;
+    transform: translateX(50%);
 }
 
 .eventsList {

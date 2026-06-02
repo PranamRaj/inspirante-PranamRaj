@@ -9,16 +9,48 @@
 }
 
 .userPage h1 {
-    font-size: 1.9rem;
-    margin: 0 0 0.5rem;
-    color: #fafafa;
+    font-size: 50px;
+        margin: 0 0 0.1rem;
+        margin-top: 0;
+        color: #f8fafc;
+        text-align: center;
+}
+h3{
+    font-size: 2rem;
+        margin: 0 0.1 0.1rem;
+        margin-top: 0;
+        color: #f8fafc;
+        
 }
 
 .userPage hr {
     border: none;
-    height: 1px;
-    background: rgba(255, 255, 255, 0.06);
-    margin: 0.5rem 0 1rem;
+        border-radius: 50px;
+        height: 10px;
+        width: 50%;
+        background: white;
+        margin: 0.1rem 0 1.25rem;
+        transform: translateX(50%);
+}
+ .counts {
+    border: solid 1px;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    border-radius: 15px;
+    margin: 1.5rem auto;
+}
+
+.countOfEvents,
+.countOfRegistrations {
+    border: solid 1px;
+    border-radius: 15px;
+    width: 50%;
+    text-align: center;
+    margin: auto 10px;
+    font-weight: 600;
+    font-size: 18px;
+    background: #042d4c;
 }
 
 .eventsList {

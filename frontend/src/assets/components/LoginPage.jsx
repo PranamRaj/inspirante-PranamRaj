@@ -18,6 +18,8 @@ function LoginPage({ onLoginSuccess, triggerAlert }) {
     }
     return (
         <>
+            <h1 className='header'>COLLEGE EVENT MANAGER</h1>
+            <div className="underline"></div>
             {(isAdmin) ?
                 <div className="adminLogin">
                     <h1>Login</h1>

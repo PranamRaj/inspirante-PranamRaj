@@ -11,6 +11,10 @@ function StudentPage({ triggerAlert }) {
             <h1>Welcome, Users!</h1>
             <hr />
             <h3>Events</h3>
+            <div className="counts">
+                <div className="countOfEvents"><p>Total Number of Events</p><p>4</p></div>
+                <div className="countOfRegistrations"><p>Your Registration</p><p>4</p></div>
+            </div>
             <div className="eventsList">
                 <ul className="events">
                     <li className="event">
