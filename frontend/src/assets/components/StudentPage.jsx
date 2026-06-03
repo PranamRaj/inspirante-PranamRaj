@@ -31,7 +31,14 @@ function StudentPage({ token, onLogout, triggerAlert }) {
                     totalEvents: statsData.totalEvents || 0,
                     userRegistrationCount: statsData.userRegistrationCount || 0
                 });
-                setMyRegistrations(statsData.registeredEvents || []);
+                const regs = statsData.registeredEvents || [];
+                // Sort registrations by event date ascending
+                regs.sort((a, b) => {
+                    const da = a?.date ? new Date(a.date) : new Date(0);
+                    const db = b?.date ? new Date(b.date) : new Date(0);
+                    return da - db;
+                });
+                setMyRegistrations(regs);
                 setEvents(eventsData || []);
             }
         } catch (error) {
@@ -67,7 +74,7 @@ function StudentPage({ token, onLogout, triggerAlert }) {
         }
     };
     const isUserRegistered = (eventId) => {
-        return myRegistrations.some(regEvent => regEvent._id === eventId);
+        return myRegistrations.some(regEvent => String(regEvent._id) === String(eventId));
     };
 
     return (
@@ -87,17 +94,31 @@ function StudentPage({ token, onLogout, triggerAlert }) {
                 <ul className="events">
                     {events.map((event) => {
                         const registered = isUserRegistered(event._id);
+                        const registeredCount = Number(event.registrationCount) || 0;
+                        const cap = Number(event.capacity) || 0;
+                        const isFull = cap > 0 && registeredCount >= cap;
+
                         return (
                             <li className="event" key={event._id}>
                                 <h4>{event.title}</h4>
                                 <p>Date: {event.date}</p>
                                 <p>Venue: {event.venue}</p>
-                                <p>Capacity: {event.capacity}</p>
+                                <p>Capacity: {event.capacity} {isFull && <span style={{ color: '#ff7575', fontWeight: 700, marginLeft: '8px' }}>Full</span>}</p>
 
                                 <button
-                                    className={registered ? 'registered' : 'register'}
-                                    onClick={() => !registered && registerEventHandler(event._id)}
-                                    disabled={registered}
+                                    className={'register'}
+                                    onClick={() => {
+                                        if (isFull) {
+                                            triggerAlert('Event is full.');
+                                            return;
+                                        }
+                                        if (isUserRegistered(event._id)) {
+                                            triggerAlert('You have already registered for this event.');
+                                            return;
+                                        }
+                                        registerEventHandler(event._id);
+                                    }}
+                                    disabled={isFull}
                                 >
                                     {registered ? 'Registered' : 'Register'}
                                 </button>
@@ -109,7 +130,7 @@ function StudentPage({ token, onLogout, triggerAlert }) {
             </div>
 
 
-            <h3>Your Confirmed Registrations</h3>
+            <h3>Your Registrations</h3>
             <div className="eventResgistered">
                 <ul className="events">
                     {myRegistrations.map((event) => (

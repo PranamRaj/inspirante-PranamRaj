@@ -14,22 +14,14 @@ router.post('/login', async (req, res) => {
         }
 
         let user = await User.findOne({ username });
-
+        // Do not create users on login. Only allow existing seeded users to log in.
         if (!user) {
-            const hashedPassword = await bcrypt.hash(password, 10);
-            user = new User({
-                username,
-                password: hashedPassword,
-                name: name || 'New Student',
-                role: role || 'user'
-            });
-            await user.save();
-        } else {
+            return res.status(401).json({ message: 'Invalid credentials.' });
+        }
 
-            const isMatch = await bcrypt.compare(password, user.password);
-            if (!isMatch) {
-                return res.status(401).json({ message: 'Invalid credentials.' });
-            }
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Invalid credentials.' });
         }
 
         const token = jwt.sign(
