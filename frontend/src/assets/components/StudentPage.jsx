@@ -43,14 +43,13 @@ function StudentPage({ token, onLogout, triggerAlert }) {
         if (token) loadStudentData();
     }, [token]);
 
-    // NEW ACTION: Submit registration data to the backend API
     const registerEventHandler = async (eventId) => {
         try {
             const response = await fetch('http://localhost:5000/api/register', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${token}`, // Pass session token securely
-                    'Content-Type': 'application/json' // Crucial content-type header
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ eventId })
             });
@@ -59,7 +58,7 @@ function StudentPage({ token, onLogout, triggerAlert }) {
 
             if (response.ok) {
                 triggerAlert('Registered for the event successfully!');
-                loadStudentData(); // Refresh metrics and lists dynamically from the database
+                loadStudentData();
             } else {
                 triggerAlert(data.message || 'Registration failed.');
             }
@@ -67,8 +66,6 @@ function StudentPage({ token, onLogout, triggerAlert }) {
             triggerAlert('Could not process registration request.');
         }
     };
-
-    // Helper check to determine if the student already registered for a specific event
     const isUserRegistered = (eventId) => {
         return myRegistrations.some(regEvent => regEvent._id === eventId);
     };
@@ -96,7 +93,7 @@ function StudentPage({ token, onLogout, triggerAlert }) {
                                 <p>Date: {event.date}</p>
                                 <p>Venue: {event.venue}</p>
                                 <p>Capacity: {event.capacity}</p>
-                                {/* Alter button text, styling, and action based on live database registrations */}
+
                                 <button
                                     className={registered ? 'registered' : 'register'}
                                     onClick={() => !registered && registerEventHandler(event._id)}
@@ -111,7 +108,7 @@ function StudentPage({ token, onLogout, triggerAlert }) {
                 </ul>
             </div>
 
-            {/* NEW VISUAL LIST: Displays events the user successfully registered for */}
+
             <h3>Your Confirmed Registrations</h3>
             <div className="eventResgistered">
                 <ul className="events">

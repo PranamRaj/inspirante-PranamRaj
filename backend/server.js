@@ -4,16 +4,15 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 const authRoutes = require('./routes/auth');
-const eventRoutes = require('./routes/events'); // 1. Import our new events file
+const eventRoutes = require('./routes/events');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-// 2. Mount both sets of routes safely behind the required /api prefix
 app.use('/api', authRoutes);
-app.use('/api', eventRoutes); // 3. Enables all event and dashboard routes
+app.use('/api', eventRoutes);
 
 const PORT = process.env.PORT || 5000;
 

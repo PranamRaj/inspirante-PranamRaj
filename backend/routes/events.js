@@ -3,7 +3,6 @@ const router = express.Router();
 const { Event, Registration } = require('../models/schema');
 const { verifyToken, requireAdmin } = require('../middleware/auth');
 
-// 1. GET /api/events -> Fetch all active events (For both Student & Admin)
 router.get('/events', verifyToken, async (req, res) => {
     try {
         const events = await Event.find();
@@ -13,7 +12,6 @@ router.get('/events', verifyToken, async (req, res) => {
     }
 });
 
-// 2. POST /api/events -> Create a brand new college event (Strictly Admin only)
 router.post('/events', verifyToken, requireAdmin, async (req, res) => {
     const { title, date, venue, capacity } = req.body;
 
@@ -25,51 +23,50 @@ router.post('/events', verifyToken, requireAdmin, async (req, res) => {
     try {
         const newEvent = new Event({ title, date, venue, capacity });
         await newEvent.save();
-        return res.status(201).json(newEvent); // 201 means "Created successfully"
+        return res.status(201).json(newEvent);
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
 });
 
-// 3. POST /api/register -> Register a student for an event (Student/User only)
 router.post('/register', verifyToken, async (req, res) => {
     const { eventId } = req.body;
-    const userId = req.user.id; // Pulled safely from verified JWT payload context
+    const userId = req.user.id;
 
     if (!eventId) {
         return res.status(400).json({ message: 'Event ID is required.' });
     }
 
     try {
-        // Check if the student already signed up for this specific event
         const existingRegistration = await Registration.findOne({ userId, eventId });
         if (existingRegistration) {
             return res.status(400).json({ message: 'You have already registered for this event.' });
         }
-
-        // Save the new registration link record
         const registration = new Registration({ userId, eventId });
         await registration.save();
+        await Event.findByIdAndUpdate(eventId, { $inc: { registrationCount: 1 } });
         return res.status(200).json({ message: 'Registered for the event successfully!' });
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
 });
 
-// 4. GET /api/dashboard -> Fetch counter metrics and user specific sign-ups dynamically
 router.get('/dashboard', verifyToken, async (req, res) => {
     try {
+        const { eventId } = req.params;
         const totalEvents = await Event.countDocuments();
-        const totalRegistrationsCount = await Registration.countDocuments(); // Useful for global admin summary
-
-        // Fetch individual student registrations and pull the referenced event schema information
+        const totalRegistrationsCount = await Registration.countDocuments();
         const myRegistrations = await Registration.find({ userId: req.user.id }).populate('eventId');
+        const eventDoc = await Event.findById(eventId).select('registrationCount');
+        const currentRegistrationCount = eventDoc ? (eventDoc.registrationCount || 0) : 0;
+        const registrations = await Registration.find({ eventId }).populate('userId', 'name username');
 
         return res.status(200).json({
             totalEvents,
             totalRegistrationsCount,
             userRegistrationCount: myRegistrations.length,
-            // Map out clean arrays of event sub-documents filtering out missing or deleted references
+            totalRegistrations: currentRegistrationCount, 
+            registeredStudents: registrations.map(reg => reg.userId).filter(Boolean),
             registeredEvents: myRegistrations.map(r => r.eventId).filter(Boolean)
         });
     } catch (error) {

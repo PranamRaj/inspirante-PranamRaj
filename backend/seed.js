@@ -5,20 +5,17 @@ const { User } = require('./models/schema');
 
 const seedDatabase = async () => {
     try {
-        // 1. Establish database connection
         await mongoose.connect(process.env.MONGO_URI);
         console.log('Connected to MongoDB for seeding...');
 
-        // 2. Clear out any existing users to avoid conflicts
         await User.deleteMany({});
         console.log('Cleared existing user data.');
 
-        // 3. Encrypt passwords securely
         const hashedAdminPassword = await bcrypt.hash('admin123', 10);
         const hashedUserPassword = await bcrypt.hash('user123', 10);
         const hashedUserPassword1 = await bcrypt.hash('user123', 10);
 
-        // 4. Create an Admin and a Student baseline record
+
         await User.create([
             {
                 username: 'admin',
@@ -41,10 +38,10 @@ const seedDatabase = async () => {
         ]);
 
         console.log('Database Seeding Completed Successfully! 🌱');
-        process.exit(0); // Exit script cleanly
+        process.exit(0);
     } catch (error) {
         console.error('Error seeding database:', error);
-        process.exit(1); // Exit with error flag
+        process.exit(1);
     }
 };
 

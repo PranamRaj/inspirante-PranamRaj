@@ -33,7 +33,7 @@ function App() {
     <>
       {!token ? (
         <Login onLoginSuccess={handleLoginSuccess} triggerAlert={triggerAlert} />
-      ) : role === 'admin' ? ( // Clean absolute match check
+      ) : role === 'admin' ? (
         <Admin token={token} onLogout={handleLogout} triggerAlert={triggerAlert} />
       ) : (
         <Users token={token} onLogout={handleLogout} triggerAlert={triggerAlert} />

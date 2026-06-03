@@ -5,7 +5,6 @@ function AdminPage({ token, onLogout, triggerAlert }) {
     const [events, setEvents] = useState([]);
     const [stats, setStats] = useState({ totalEvents: 0, totalRegistrationsCount: 0 });
 
-    // States to control form visibility and input values
     const [showForm, setShowForm] = useState(false);
     const [title, setTitle] = useState('');
     const [date, setDate] = useState('');
@@ -48,7 +47,6 @@ function AdminPage({ token, onLogout, triggerAlert }) {
         if (token) loadAdminData();
     }, [token]);
 
-    // Handle form submission to create a new event
     const handleCreateEvent = async (e) => {
         e.preventDefault();
 
@@ -57,13 +55,13 @@ function AdminPage({ token, onLogout, triggerAlert }) {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json' // Crucial required header
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     title,
                     date,
                     venue,
-                    capacity: Number(capacity) // Convert to true mathematical number
+                    capacity: Number(capacity)
                 })
             });
 
@@ -96,7 +94,7 @@ function AdminPage({ token, onLogout, triggerAlert }) {
             <h3>Events Management
                 <span>
                     <button className="createEventButton" onClick={() => setShowForm(!showForm)}>
-                         + Create New Event
+                        + Create New Event
                     </button>
                 </span>
             </h3>
@@ -146,12 +144,7 @@ function AdminPage({ token, onLogout, triggerAlert }) {
                             onChange={(e) => setCapacity(e.target.value)}
                             required
                         />
-                        <p>Enter Event Description</p>
-                        <textarea
-                            placeholder="Event Description"
-                            className="createEventInput"
-                            required
-                        ></textarea>
+
                         <br />
                         <div className="innerBUtton">
                             <button className="createEventButton" type="submit">
@@ -161,13 +154,13 @@ function AdminPage({ token, onLogout, triggerAlert }) {
                                 Cancel
                             </button></span>
                         </div>
-                        
+
                     </form>
                 </div>)}
 
             <div className="counts">
                 <div className="countOfEvents"><p>Total Number of Events</p><p>{stats.totalEvents}</p></div>
-                <div className="countOfRegistrations"><p>Total Number of Registration</p><p>{stats.totalRegistrationsCount}</p></div>
+                <div className="countOfRegistrations"><p>Total Registrations</p><p>{stats.totalRegistrationsCount}</p></div>
             </div>
 
             <div className="eventsList">
@@ -178,6 +171,7 @@ function AdminPage({ token, onLogout, triggerAlert }) {
                             <p>Date: {event.date}</p>
                             <p>Venue: {event.venue}</p>
                             <p>Capacity: {event.capacity}</p>
+                            <p>Registration: {event.registrationCount || 0}</p>
                         </li>
                     ))}
                     {events.length === 0 && <p style={{ padding: '15px' }}>No events created yet.</p>}
