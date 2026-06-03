@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import '../css/Users.css';
+import '../css/student.css';
 
 function StudentPage({ token, onLogout, triggerAlert }) {
     const [events, setEvents] = useState([]);
