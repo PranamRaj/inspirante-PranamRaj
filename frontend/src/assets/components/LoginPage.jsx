@@ -64,7 +64,7 @@ function LoginPage({ onLoginSuccess, triggerAlert }) {
                         <button className="adminButton" type='submit'>Login</button>
                     </form>
                     <p className="isUser">
-                        User? <a href="#" onClick={() => { setIsAdmin(false); setUsername(''); setPassword(''); }}>Click here</a>
+                        Student? <a href="#" onClick={() => { setIsAdmin(false); setUsername(''); setPassword(''); }}>Click here</a>
                     </p>
                 </div>
             ) : (
