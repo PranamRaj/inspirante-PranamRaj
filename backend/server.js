@@ -1,22 +1,22 @@
-require('dotenv').config(); // 1. Load variables from .env immediately
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
-const authRoutes = require('./routes/auth'); // Import our login routes
+const authRoutes = require('./routes/auth');
+const eventRoutes = require('./routes/events'); // 1. Import our new events file
 
 const app = express();
 
-// 2. Global Middleware configurations
-app.use(cors()); // Allow your React app to communicate with this server
-app.use(express.json()); // Allow the server to read incoming JSON request bodies
+app.use(cors());
+app.use(express.json());
 
-// 3. Strict Prefix Routing rule matching requirements
-app.use('/api', authRoutes); // Mounts login path under http://localhost:5000/api/login
+// 2. Mount both sets of routes safely behind the required /api prefix
+app.use('/api', authRoutes);
+app.use('/api', eventRoutes); // 3. Enables all event and dashboard routes
 
 const PORT = process.env.PORT || 5000;
 
-// 4. Initialize Database Connection and Start Engine
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
         console.log('Successfully connected to MongoDB');

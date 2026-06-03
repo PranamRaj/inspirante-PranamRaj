@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Event, Registration } = require('../models/schemas');
+const { Event, Registration } = require('../models/schema');
 const { verifyToken, requireAdmin } = require('../middleware/auth');
 
 // 1. GET /api/events -> Fetch all active events (For both Student & Admin)

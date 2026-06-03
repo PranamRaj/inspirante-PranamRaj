@@ -7,37 +7,25 @@ function LoginPage({ onLoginSuccess, triggerAlert }) {
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
 
+   
     const handleLogin = async (e) => {
         e.preventDefault();
-
-        // 1. Determine the target security role based on the active form state
         const targetRole = isAdmin ? 'admin' : 'user';
 
         try {
-            // 2. Make the API Call to your local Express server
             const response = await fetch('http://localhost:5000/api/login', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json' // CRUCIAL HEADER requirement fulfilled
-                },
-                body: JSON.stringify({
-                    username,
-                    password,
-                    name: !isAdmin ? name : undefined, // Include student name if registering
-                    role: targetRole
-                })
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password, role: targetRole })
             });
 
             const data = await response.json();
 
-            // 3. Evaluate responses based on clear HTTP status codes
             if (!response.ok) {
-                // Instantly catch any 400 or 401 login errors from your backend
                 triggerAlert(data.message || 'Login failed.');
                 return;
             }
 
-            // 4. Save session token securely via App.jsx state handler
             onLoginSuccess(data.token, data.user.role);
             triggerAlert(`${data.user.role === 'admin' ? 'Admin' : 'User'} logged in successfully!`);
 
@@ -45,6 +33,7 @@ function LoginPage({ onLoginSuccess, triggerAlert }) {
             triggerAlert('Could not connect to the backend server.');
         }
     };
+
 
     return (
         <>
