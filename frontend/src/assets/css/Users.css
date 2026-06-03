@@ -1,11 +1,10 @@
 
 
 .userPage {
-    max-width: 1000px;
-    margin: 2.5rem auto;
-    padding: 1.25rem;
-    color: #0b1220;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.00));
+    max-width: 1100px;
+    margin:auto;
+    padding: 1rem;
+    color: #e6eef8;
 }
 
 .userPage h1 {
@@ -54,7 +53,7 @@ h3{
 }
 
 .eventsList {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.75rem;
 }
 
 .events {
