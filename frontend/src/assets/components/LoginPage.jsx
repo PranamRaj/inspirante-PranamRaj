@@ -1,57 +1,123 @@
-import { useState } from 'react'
-import '../css/Login.css'
-import AdminPage from './AdminPage.jsx'
-import StudentPage from './StudentPage.jsx'
+import { useState } from 'react';
+import '../css/Login.css';
 
 function LoginPage({ onLoginSuccess, triggerAlert }) {
     const [isAdmin, setIsAdmin] = useState(true);
-    const handleLogin = (e) => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
+
+    const handleLogin = async (e) => {
         e.preventDefault();
-        const currentFormClass = e.currentTarget.className;
-        if (currentFormClass.includes('adminForm')) {
-            onLoginSuccess('admin');
-            triggerAlert('Admin logged in successfully!');
-        } else {
-            onLoginSuccess('user');
-            triggerAlert('User logged in successfully!');
+
+        // 1. Determine the target security role based on the active form state
+        const targetRole = isAdmin ? 'admin' : 'user';
+
+        try {
+            // 2. Make the API Call to your local Express server
+            const response = await fetch('http://localhost:5000/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json' // CRUCIAL HEADER requirement fulfilled
+                },
+                body: JSON.stringify({
+                    username,
+                    password,
+                    name: !isAdmin ? name : undefined, // Include student name if registering
+                    role: targetRole
+                })
+            });
+
+            const data = await response.json();
+
+            // 3. Evaluate responses based on clear HTTP status codes
+            if (!response.ok) {
+                // Instantly catch any 400 or 401 login errors from your backend
+                triggerAlert(data.message || 'Login failed.');
+                return;
+            }
+
+            // 4. Save session token securely via App.jsx state handler
+            onLoginSuccess(data.token, data.user.role);
+            triggerAlert(`${data.user.role === 'admin' ? 'Admin' : 'User'} logged in successfully!`);
+
+        } catch (error) {
+            triggerAlert('Could not connect to the backend server.');
         }
-    }
+    };
+
     return (
         <>
             <h1 className='header'>COLLEGE EVENT MANAGER</h1>
             <div className="underline"></div>
-            {(isAdmin) ?
+            {isAdmin ? (
                 <div className="adminLogin">
-                    <h1>Login</h1>
-                    <form action="Post" className="adminForm" onSubmit={handleLogin}>
+                    <h1>Admin Login</h1>
+                    <form className="adminForm" onSubmit={handleLogin}>
                         <p>Enter your Username</p>
-                        <input type="text" placeholder="Username" className="adminInput" />
+                        <input
+                            type="text"
+                            placeholder="Username"
+                            className="adminInput"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
+                        />
                         <p>Enter your Password</p>
-                        <input type="password" placeholder="Password" className="adminInput" /><br />
-                        <button className="adminButton" type='submit' >Login</button>
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            className="adminInput"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        /><br />
+                        <button className="adminButton" type='submit'>Login</button>
                     </form>
                     <p className="isUser">
-                        User? <a href="#" onClick={() => setIsAdmin(false)} >Click here</a>
+                        User? <a href="#" onClick={() => { setIsAdmin(false); setUsername(''); setPassword(''); }}>Click here</a>
                     </p>
-                </div> :
+                </div>
+            ) : (
                 <div className="userLogin">
-                    <h1>Login</h1>
-                    <form action="Post" className="userForm" onSubmit={handleLogin}>
+                    <h1>Student Login / Sign Up</h1>
+                    <form className="userForm" onSubmit={handleLogin}>
                         <p>Enter your Name</p>
-                        <input type="text" placeholder="Name" className="userInput" />
+                        <input
+                            type="text"
+                            placeholder="Name"
+                            className="userInput"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
                         <p>Enter your Username</p>
-                        <input type="text" placeholder="Username" className="userInput" />
+                        <input
+                            type="text"
+                            placeholder="Username"
+                            className="userInput"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
+                        />
                         <p>Enter your Password</p>
-                        <input type="password" placeholder="Password" className="userInput" /><br />
-                        <button className="userButton" type='submit' >Login</button>
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            className="userInput"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        /><br />
+                        <button className="userButton" type='submit'>Login</button>
                     </form>
                     <p className="isAdmin">
-                        Admin? <a href="#" onClick={() => setIsAdmin(true)}  >Click here</a>
+                        Admin? <a href="#" onClick={() => { setIsAdmin(true); setUsername(''); setPassword(''); }}>Click here</a>
                     </p>
-                </div>}
-
+                </div>
+            )}
         </>
-    )
-
+    );
 }
+
 export default LoginPage;
