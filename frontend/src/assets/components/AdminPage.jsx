@@ -6,7 +6,7 @@ function AdminPage({ token, onLogout, triggerAlert }) {
     const [stats, setStats] = useState({ totalEvents: 0, totalRegistrationsCount: 0 });
 
     // States to control form visibility and input values
-    const [showForm, setShowForm] = useState(false);
+    const [showForm, setShowForm] = useState(true);
     const [title, setTitle] = useState('');
     const [date, setDate] = useState('');
     const [venue, setVenue] = useState('');
