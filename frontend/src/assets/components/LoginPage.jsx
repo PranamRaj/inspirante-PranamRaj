@@ -69,7 +69,7 @@ function LoginPage({ onLoginSuccess, triggerAlert }) {
                 </div>
             ) : (
                 <div className="userLogin">
-                    <h1>Student Login / Sign Up</h1>
+                    <h1>Student Login</h1>
                     <form className="userForm" onSubmit={handleLogin}>
                         <p>Enter your Name</p>
                         <input

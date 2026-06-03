@@ -16,6 +16,7 @@ const seedDatabase = async () => {
         // 3. Encrypt passwords securely
         const hashedAdminPassword = await bcrypt.hash('admin123', 10);
         const hashedUserPassword = await bcrypt.hash('user123', 10);
+        const hashedUserPassword1 = await bcrypt.hash('user123', 10);
 
         // 4. Create an Admin and a Student baseline record
         await User.create([
@@ -28,7 +29,13 @@ const seedDatabase = async () => {
             {
                 username: 'student01',
                 password: hashedUserPassword,
-                name: 'John Doe',
+                name: 'student01',
+                role: 'user'
+            },
+            {
+                username: 'student02',
+                password: hashedUserPassword1,
+                name: 'student02',
                 role: 'user'
             }
         ]);

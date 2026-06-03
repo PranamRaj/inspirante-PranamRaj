@@ -6,7 +6,7 @@ function AdminPage({ token, onLogout, triggerAlert }) {
     const [stats, setStats] = useState({ totalEvents: 0, totalRegistrationsCount: 0 });
 
     // States to control form visibility and input values
-    const [showForm, setShowForm] = useState(true);
+    const [showForm, setShowForm] = useState(false);
     const [title, setTitle] = useState('');
     const [date, setDate] = useState('');
     const [venue, setVenue] = useState('');
@@ -71,13 +71,11 @@ function AdminPage({ token, onLogout, triggerAlert }) {
 
             if (response.ok) {
                 triggerAlert('Event created successfully!');
-                // Clear out form inputs cleanly
                 setTitle('');
                 setDate('');
                 setVenue('');
                 setCapacity('');
                 setShowForm(false);
-                // Refresh metrics and tables dynamically from database
                 loadAdminData();
             } else {
                 triggerAlert(data.message || 'Failed to create event.');
@@ -89,41 +87,83 @@ function AdminPage({ token, onLogout, triggerAlert }) {
 
     return (
         <div className="adminPage">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div className="adminheader">
                 <h1>Welcome, Admin!</h1>
-                <button className="createEventButton" onClick={onLogout} style={{ backgroundColor: '#d9534f', padding: '8px 15px' }}>Logout</button>
+                <button className="logout" onClick={onLogout}>Logout</button>
             </div>
             <hr />
 
             <h3>Events Management
                 <span>
                     <button className="createEventButton" onClick={() => setShowForm(!showForm)}>
-                        {showForm ? 'Cancel' : '+ Create New Event'}
+                         + Create New Event
                     </button>
                 </span>
             </h3>
 
-            {/* Event Creation Form Element conditional rendering */}
             {showForm && (
-                <div style={{ backgroundColor: '#f9f9f9', padding: '20px', borderRadius: '8px', margin: '20px 0', border: '1px solid #ddd' }}>
-                    <h4>Create New Event Form</h4>
-                    <form onSubmit={handleCreateEvent}>
-                        <p>Event Title</p>
-                        <input type="text" placeholder="e.g. Tech Seminar" style={{ width: '100%', padding: '8px', margin: '5px 0' }} value={title} onChange={(e) => setTitle(e.target.value)} required />
-
-                        <p>Date</p>
-                        <input type="date" style={{ width: '100%', padding: '8px', margin: '5px 0' }} value={date} onChange={(e) => setDate(e.target.value)} required />
-
-                        <p>Venue</p>
-                        <input type="text" placeholder="e.g. Conference Hall" style={{ width: '100%', padding: '8px', margin: '5px 0' }} value={venue} onChange={(e) => setVenue(e.target.value)} required />
-
-                        <p>Capacity</p>
-                        <input type="number" placeholder="e.g. 100" style={{ width: '100%', padding: '8px', margin: '5px 0' }} value={capacity} onChange={(e) => setCapacity(e.target.value)} required /><br /><br />
-
-                        <button type="submit" className="createEventButton" style={{ width: '100%' }}>Submit Event to Database</button>
+                <div className="createEvents" onClick={() => setShowForm(false)}>
+                    <form
+                        action="Post"
+                        className="createEventForm"
+                        onClick={(e) => e.stopPropagation()}
+                        onSubmit={handleCreateEvent}
+                    >
+                        <p>Enter Event Name</p>
+                        <input
+                            type="text"
+                            placeholder="Event Name"
+                            className="createEventInput"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            required
+                        />
+                        <p>Enter Event Date</p>
+                        <input
+                            type="date"
+                            placeholder="Event Date"
+                            className="createEventInput"
+                            value={date}
+                            onChange={(e) => setDate(e.target.value)}
+                            required
+                        />
+                        <p>Enter Event Venue</p>
+                        <input
+                            type="text"
+                            placeholder="Event Venue"
+                            className="createEventInput"
+                            value={venue}
+                            onChange={(e) => setVenue(e.target.value)}
+                            required
+                        />
+                        <p>Enter Maximum Capacity</p>
+                        <input
+                            type="number"
+                            min="1"
+                            placeholder="Maximum Capacity"
+                            className="createEventInput"
+                            value={capacity}
+                            onChange={(e) => setCapacity(e.target.value)}
+                            required
+                        />
+                        <p>Enter Event Description</p>
+                        <textarea
+                            placeholder="Event Description"
+                            className="createEventInput"
+                            required
+                        ></textarea>
+                        <br />
+                        <div className="innerBUtton">
+                            <button className="createEventButton" type="submit">
+                                Create Event
+                            </button>
+                            <span><button className="createEventButton" onClick={() => setShowForm(!showForm)}>
+                                Cancel
+                            </button></span>
+                        </div>
+                        
                     </form>
-                </div>
-            )}
+                </div>)}
 
             <div className="counts">
                 <div className="countOfEvents"><p>Total Number of Events</p><p>{stats.totalEvents}</p></div>

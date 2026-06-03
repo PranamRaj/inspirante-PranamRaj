@@ -50,6 +50,22 @@
     font-weight: 600;
     cursor: pointer;
 }
+.adminheader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logout {
+    background-color: #d9534f;
+    height: 2.5rem;
+    text-align: center;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    width: 100px;
+}
 
 .adminPage hr {
     border:none;
@@ -179,7 +195,7 @@
     color: #041025;
     font-weight: 700;
     cursor: pointer;
-
+    margin:auto 12px;
 }
 .createEventButton:hover {
     background: linear-gradient(135deg, #34d399, #60a5fa);

@@ -75,9 +75,9 @@ function StudentPage({ token, onLogout, triggerAlert }) {
 
     return (
         <div className="userPage">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div className="studentheader">
                 <h1>Welcome, Student!</h1>
-                <button className="register" onClick={onLogout} style={{ backgroundColor: '#d9534f', color: '#fff', border: 'none', padding: '8px 15px', cursor: 'pointer' }}>Logout</button>
+                <button className="logout" onClick={onLogout}>Logout</button>
             </div>
             <hr />
             <h3>Events</h3>
