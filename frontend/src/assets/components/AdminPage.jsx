@@ -165,15 +165,35 @@ function AdminPage({ token, onLogout, triggerAlert }) {
 
             <div className="eventsList">
                 <ul className="events">
-                    {events.map((event) => (
-                        <li className="event" key={event._id}>
-                            <h4>{event.title}</h4>
-                            <p>Date: {event.date}</p>
-                            <p>Venue: {event.venue}</p>
-                            <p>Capacity: {event.capacity}</p>
-                            <p>Registration: {event.registrationCount || 0}</p>
-                        </li>
-                    ))}
+                    {events.map((event) => {
+                        const registered = Number(event.registrationCount) || 0;
+                        const capacityNum = Number(event.capacity) || 0;
+                        const percent = capacityNum > 0 ? Math.min(100, Math.round((registered / capacityNum) * 100)) : 0;
+                        const barClass = `capacityBar ${percent < 50 ? 'green' : percent < 80 ? 'amber' : 'red'}`;
+
+                        return (
+                            <li className="event" key={event._id}>
+                                <h4>{event.title}</h4>
+                                <p>Date: {event.date}</p>
+                                <p>Venue: {event.venue}</p>
+                                <p>Capacity: {capacityNum}</p>
+
+                                <div className="capacityBarContainer">
+                                    <div
+                                        className={barClass}
+                                        style={{ width: `${percent}%` }}
+                                        title={`${percent}% full`}
+                                        role="progressbar"
+                                        aria-valuemin={0}
+                                        aria-valuemax={capacityNum}
+                                        aria-valuenow={registered}
+                                    />
+                                </div>
+
+                                <p style={{ marginTop: '6px' }}>{registered} / {capacityNum} registered ({percent}%)</p>
+                            </li>
+                        );
+                    })}
                     {events.length === 0 && <p style={{ padding: '15px' }}>No events created yet.</p>}
                 </ul>
             </div>
