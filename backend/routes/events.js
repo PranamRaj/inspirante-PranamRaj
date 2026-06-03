@@ -38,10 +38,21 @@ router.post('/register', verifyToken, async (req, res) => {
     }
 
     try {
+        // Ensure event exists and capacity is respected
+        const event = await Event.findById(eventId).select('capacity registrationCount');
+        if (!event) return res.status(404).json({ message: 'Event not found.' });
+
+        // Prevent duplicate registration
         const existingRegistration = await Registration.findOne({ userId, eventId });
         if (existingRegistration) {
             return res.status(400).json({ message: 'You have already registered for this event.' });
         }
+
+        // Prevent registration if event is full
+        if ((event.registrationCount || 0) >= (event.capacity || 0)) {
+            return res.status(400).json({ message: 'Event capacity is full.' });
+        }
+
         const registration = new Registration({ userId, eventId });
         await registration.save();
         await Event.findByIdAndUpdate(eventId, { $inc: { registrationCount: 1 } });
@@ -65,10 +76,29 @@ router.get('/dashboard', verifyToken, async (req, res) => {
             totalEvents,
             totalRegistrationsCount,
             userRegistrationCount: myRegistrations.length,
-            totalRegistrations: currentRegistrationCount, 
+            totalRegistrations: currentRegistrationCount,
             registeredStudents: registrations.map(reg => reg.userId).filter(Boolean),
             registeredEvents: myRegistrations.map(r => r.eventId).filter(Boolean)
         });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+});
+
+// Get registrations for a specific event (admin only)
+router.get('/events/:id/registrations', verifyToken, requireAdmin, async (req, res) => {
+    try {
+        const eventId = req.params.id;
+        if (!eventId) return res.status(400).json({ message: 'Event ID is required.' });
+
+        const regs = await Registration.find({ eventId }).populate('userId', 'name username');
+        const students = regs.map(r => ({
+            id: r.userId?._id,
+            name: r.userId?.name || r.userId?.username,
+            username: r.userId?.username,
+            registeredAt: r.createdAt
+        }));
+        return res.status(200).json({ students, count: students.length });
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }

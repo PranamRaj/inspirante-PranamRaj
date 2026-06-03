@@ -4,6 +4,9 @@ import '../css/Admin.css';
 function AdminPage({ token, onLogout, triggerAlert }) {
     const [events, setEvents] = useState([]);
     const [stats, setStats] = useState({ totalEvents: 0, totalRegistrationsCount: 0 });
+    const [selectedEvent, setSelectedEvent] = useState(null);
+    const [registrations, setRegistrations] = useState([]);
+    const [showRegsModal, setShowRegsModal] = useState(false);
 
     const [showForm, setShowForm] = useState(false);
     const [title, setTitle] = useState('');
@@ -46,6 +49,27 @@ function AdminPage({ token, onLogout, triggerAlert }) {
     useEffect(() => {
         if (token) loadAdminData();
     }, [token]);
+
+    const openRegistrations = async (event) => {
+        if (!event || !event._id) return;
+        try {
+            const res = await fetch(`http://localhost:5000/api/events/${event._id}/registrations`, {
+                method: 'GET',
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
+            });
+            const data = await res.json().catch(() => ({}));
+            if (res.ok) {
+                setSelectedEvent(event);
+                setRegistrations(data.students || []);
+                setShowRegsModal(true);
+            } else {
+                triggerAlert(data.message || `Failed to load registrations (${res.status})`);
+            }
+        } catch (err) {
+            // Network-level error (server down, CORS, etc.)
+            triggerAlert('Network error while loading registrations. Is the backend running?');
+        }
+    };
 
     const handleCreateEvent = async (e) => {
         e.preventDefault();
@@ -172,7 +196,7 @@ function AdminPage({ token, onLogout, triggerAlert }) {
                         const barClass = `capacityBar ${percent < 50 ? 'green' : percent < 80 ? 'amber' : 'red'}`;
 
                         return (
-                            <li className="event" key={event._id}>
+                            <li className="event" key={event._id} onClick={() => openRegistrations(event)} style={{ cursor: 'pointer' }}>
                                 <h4>{event.title}</h4>
                                 <p>Date: {event.date}</p>
                                 <p>Venue: {event.venue}</p>
@@ -197,6 +221,31 @@ function AdminPage({ token, onLogout, triggerAlert }) {
                     {events.length === 0 && <p style={{ padding: '15px' }}>No events created yet.</p>}
                 </ul>
             </div>
+
+            {showRegsModal && selectedEvent && (
+                <div className="createEvents" onClick={() => setShowRegsModal(false)}>
+                    <div className="createEventForm" onClick={(e) => e.stopPropagation()} style={{ minWidth: '380px' }}>
+                        <h3>Registered Students for: {selectedEvent.title}</h3>
+                        <div style={{ maxHeight: '320px', overflow: 'auto', width: '100%' }}>
+                            {registrations.length === 0 && <p style={{ padding: '12px' }}>No registrations yet.</p>}
+                            <ul className="regsList">
+                                {registrations.map((s) => (
+                                    <li key={s.id || s._id} className="regsItem">
+                                        <div>
+                                            <strong>{s.name || s.username}</strong>
+                                            <div className="regsMeta">{s.username}</div>
+                                        </div>
+                                        <div className="regsMeta">{s.registeredAt ? new Date(s.registeredAt).toLocaleString() : ''}</div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        <div style={{ marginTop: '12px' }}>
+                            <button className="createEventButton" onClick={() => setShowRegsModal(false)}>Close</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

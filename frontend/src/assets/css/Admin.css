@@ -233,6 +233,29 @@
     resize: vertical;
 }
 
+.regsList {
+    list-style: none;
+    margin: 0;
+    padding: 0.25rem;
+}
+
+.regsItem {
+    padding: 0.5rem 0.6rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.regsItem strong {
+    color: #eef2ff;
+}
+
+.regsMeta {
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
+
 .createEventButton {
     padding: 0.85rem 1rem;
     border-radius: 10px;
