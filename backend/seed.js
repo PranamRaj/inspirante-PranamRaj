@@ -18,12 +18,12 @@ const seedDatabase = async () => {
         const hashedAdminPassword = await bcrypt.hash('inspirante2026', 10);
         const hashedStudentPassword = await bcrypt.hash('student123', 10);
 
-        // Seed admin
+       
         const users = [
             { username: 'admin', password: hashedAdminPassword, name: 'Admin', role: 'admin' }
         ];
 
-        // Seed 11 students as per brief
+        
         const studentList = [
             ['Asha Rao', 'asha.rao'],
             ['Ravi Shetty', 'ravi.shetty'],
@@ -44,7 +44,7 @@ const seedDatabase = async () => {
 
         await User.insertMany(users);
 
-        // Seed sample events
+        
         const events = [
             { title: 'Tech Symposium 2026', date: '2026-07-10', venue: 'Main Auditorium', capacity: 120 },
             { title: 'Hackathon', date: '2026-07-15', venue: 'Lab Block C', capacity: 40 },

@@ -16,7 +16,7 @@ function AdminPage({ token, onLogout, triggerAlert }) {
 
     const loadAdminData = async () => {
         try {
-            const statsRes = await fetch('http://localhost:5000/api/dashboard', {
+            const statsRes = await fetch('http://localhost:3000/api/dashboard', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -25,7 +25,7 @@ function AdminPage({ token, onLogout, triggerAlert }) {
             });
             const statsData = await statsRes.json();
 
-            const eventsRes = await fetch('http://localhost:5000/api/events', {
+            const eventsRes = await fetch('http://localhost:3000/api/events', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -53,7 +53,7 @@ function AdminPage({ token, onLogout, triggerAlert }) {
     const openRegistrations = async (event) => {
         if (!event || !event._id) return;
         try {
-            const res = await fetch(`http://localhost:5000/api/events/${event._id}/registrations`, {
+            const res = await fetch(`http://localhost:3000/api/events/${event._id}/registrations`, {
                 method: 'GET',
                 headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
             });
@@ -75,7 +75,7 @@ function AdminPage({ token, onLogout, triggerAlert }) {
         e.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:5000/api/events', {
+            const response = await fetch('http://localhost:3000/api/events', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,

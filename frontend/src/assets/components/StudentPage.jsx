@@ -8,7 +8,7 @@ function StudentPage({ token, onLogout, triggerAlert }) {
 
     const loadStudentData = async () => {
         try {
-            const statsRes = await fetch('http://localhost:5000/api/dashboard', {
+            const statsRes = await fetch('http://localhost:3000/api/dashboard', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -17,7 +17,7 @@ function StudentPage({ token, onLogout, triggerAlert }) {
             });
             const statsData = await statsRes.json();
 
-            const eventsRes = await fetch('http://localhost:5000/api/events', {
+            const eventsRes = await fetch('http://localhost:3000/api/events', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -52,7 +52,7 @@ function StudentPage({ token, onLogout, triggerAlert }) {
 
     const registerEventHandler = async (eventId) => {
         try {
-            const response = await fetch('http://localhost:5000/api/register', {
+            const response = await fetch('http://localhost:3000/api/register', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
